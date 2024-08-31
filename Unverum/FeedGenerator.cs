@@ -26,7 +26,8 @@ namespace Unverum
         IM,
         SMTV,
         KOFXV,
-        DNF
+        DNF,
+        SNOWBREAK
     }
     public enum FeedFilter
     {

@@ -363,6 +363,9 @@ namespace Unverum
                     return Setup.Generic("KOFXV_Steam.exe", "KOFXV", @"C:\Program Files (x86)\Steam\steamapps\common\THE KING OF FIGHTERS XV\KOFXV_Steam.exe", "KOFXV.exe", "1498570", epic);
                 case GameFilter.DNF:
                     return Setup.Generic("DNFDuel.exe", "RED", @"C:\Program Files (x86)\Steam\steamapps\common\DNFDuel\DNFDuel.exe", steamId: "1216060");
+                case GameFilter.SNOWBREAK:
+                    //return Setup.Win64FolderSetup("Game.exe", "SNOWBREAK", "SnowBreak", steamId: "955945");
+                    return Setup.SnowBreak();
             }
             return false;
         }
@@ -452,6 +455,32 @@ namespace Unverum
                 return;
             }
             // Launch game
+            if (Global.config.CurrentGame.Equals("Snow Break", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (LauncherOptionsBox.SelectedIndex == 1)
+                    return;
+                else
+                {
+                    try
+                    {
+                        Global.logger.WriteLine($"Launching {Global.config.Configs[Global.config.CurrentGame].GamePath} with {Global.config.Configs[Global.config.CurrentGame].Launcher}", LoggerType.Info);
+                        var datapath = Global.config.Configs[Global.config.CurrentGame].Launcher.Replace($"{Global.s}game{Global.s}Game{Global.s}Binaries{Global.s}Win64{Global.s}Game.exe", String.Empty);
+                        var ps = new ProcessStartInfo(Global.config.Configs[Global.config.CurrentGame].Launcher)
+                        {
+                            WorkingDirectory = Path.GetDirectoryName(Global.config.Configs[Global.config.CurrentGame].Launcher),
+                            UseShellExecute = true,
+                            Verb = "open",
+                            Arguments = $" -FeatureLevelES31 -ChannelID=jinshan -userdir=\\\"{datapath}\" -gclid=CBJQ_setup"
+                        };
+                        Process.Start(ps);
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.logger.WriteLine($"Couldn't launch {Global.config.Configs[Global.config.CurrentGame].GamePath} with {Global.config.Configs[Global.config.CurrentGame].Launcher} ({ex.Message})", LoggerType.Error);
+                    }
+
+                }
+            }
             if (Global.config.CurrentGame.Equals("Shin Megami Tensei V", StringComparison.InvariantCultureIgnoreCase))
             {
                 if (LauncherOptionsBox.SelectedIndex == 1)

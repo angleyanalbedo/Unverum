@@ -78,6 +78,7 @@ namespace Unverum
                     if (!File.Exists($"{PatchPath}{Global.s}plugins{Global.s}ScarletNexusUTOCSigBypass.asi"))
                         GetPatchFiles(PatchPath);
                     break;
+
             }
             return true;
         }
@@ -197,6 +198,41 @@ namespace Unverum
             }
             var parent = Path.GetDirectoryName(defaultPath);
             var ModsFolder = $"{parent}{Global.s}RED{Global.s}Content{Global.s}Paks{Global.s}~mods";
+            Directory.CreateDirectory(ModsFolder);
+            Global.config.Configs[Global.config.CurrentGame].ModsFolder = ModsFolder;
+            Global.config.Configs[Global.config.CurrentGame].Launcher = defaultPath;
+            Global.UpdateConfig();
+            Global.logger.WriteLine($"Setup completed for {Global.config.CurrentGame}!", LoggerType.Info);
+            return true;
+        }
+
+        public static bool SnowBreak()
+        {
+            var defaultPath = $@"D:\SeasunCBJQos\Game\cbjq\game\Game\Binaries\Win64\Game.exe";
+            if (!File.Exists(defaultPath))
+            {
+                Global.logger.WriteLine($"选择尘白禁区的安装目录", LoggerType.Warning);
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.DefaultExt = ".exe";
+                dialog.Filter = $"Executable Files (Game.exe)|Game.exe";
+                dialog.Title = $"选择Game.exe从你的安装目录";
+                dialog.Multiselect = false;
+                dialog.InitialDirectory = Global.assemblyLocation;
+                dialog.ShowDialog();
+                if (!String.IsNullOrEmpty(dialog.FileName)
+                    && Path.GetFileName(dialog.FileName).Equals("Game.exe", StringComparison.InvariantCultureIgnoreCase))
+                    defaultPath = dialog.FileName;
+                else if (!String.IsNullOrEmpty(dialog.FileName))
+                {
+                    Global.logger.WriteLine($"Invalid .exe chosen", LoggerType.Error);
+                    return false;
+                }
+                else
+                    return false;
+            }
+            var parent = defaultPath.Replace($"{Global.s}Binaries{Global.s}Win64{Global.s}Game.exe", String.Empty);
+            var paks = $"{parent}{Global.s}Content{Global.s}Paks";
+            var ModsFolder = $"{paks}{Global.s}~mods";
             Directory.CreateDirectory(ModsFolder);
             Global.config.Configs[Global.config.CurrentGame].ModsFolder = ModsFolder;
             Global.config.Configs[Global.config.CurrentGame].Launcher = defaultPath;
