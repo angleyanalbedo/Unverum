@@ -106,9 +106,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="locations\Resource-cn.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource-cn.resx</DependentUpon>
+    </Compile>
     <Compile Update="UI\FetchWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="locations\Resource-cn.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource-cn.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
